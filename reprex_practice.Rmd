@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(here)
 library(janitor)
+library(reprex)
 ```
 
 Your job is to identify an error, then make a reproducible example that would help future you or someone else understand how to write the code correctly. In other words, your reprex code will *work* and offer a solution to the error thrown in each of the following examples. 
@@ -45,6 +46,16 @@ mack_creek_lengths <- mack_creek_vertebrates %>%
   ungroup()
 ```
 
+```{r}
+reprex_1_df <- dplyr::tribble(~common_name, ~scientific_name, ~size,
+                              "Cork Oak", "Quercus suber", "MEDIUM",
+                              "Coast Live Oak", "Quercus agrifolia", "LARGE")
+
+# Below the code within `mutate()` is not running properly because the function `tolower` being encased within the parenthesis of the function `is.character()`
+reprex_1_fix <- reprex_1_df %>% 
+  mutate(across(where(is.character, tolower))) 
+```
+
 ### reprex 2
 
 Identify what is causing the problem in the code below (there's only one thing). Then, create a very simple reprex that would help yourself, future you, or a colleague fix the problem. **Post your reprex as an issue in your own fork on GitHub.**
@@ -60,5 +71,21 @@ mack_creek_vertebrates %>%
          labs(x = "Cutthroat trout length (cm)",
               y = "Weight (g)")
 ```
+
+```{r}
+
+library(tidyverse)
+
+reprex_2_df <- dplyr::tribble(~tree_width, ~tree_height,
+                       100, 80,
+                       150, 110,
+                       120, 90
+                       )
+
+# This graph is not currently working because the "shape" is not a variable from the data set and therefore should not be within `aes()`
+ggplot(reprex_2_df, aes(x = tree_width, y = tree_height)) +
+         geom_point(aes(shape = 12), color = "purple")
+```
+
 
 ## End
